@@ -2,17 +2,20 @@
 import ollama
 
 class GenerateResponse:
-    def __init__(self, model_name="gemma3"):
+    def __init__(self, model_name="mistral"):
         try:
             self.model = model_name
         except Exception as e:
             raise Exception("Error finding model {model_name}",e)
 
     def check_ollama_model(self):
+        print("checking")
         try:
+            #print("checking 2")
             models = ollama.list()
-            model_names = [model['name'] for model in models['models']]
-
+            print(models)
+            model_names = [model.model for model in models['models']]
+            print("Printing model names",model_names)
             if self.model not in model_names:
                 print(f"Model '{self.model}' not found. Attempting to pull it...")
                 ollama.pull(self.model)
@@ -31,8 +34,8 @@ class GenerateResponse:
             print("Error during Ollama model check:", e)
 
     def getresponse(self, prompt):
+        #self.check_ollama_model()
         try:
-            self.check_ollama_model()
             response = ollama.chat(
                 model=self.model,
                 messages=[

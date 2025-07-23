@@ -5,5 +5,6 @@ from . import views
 
 app_name= 'geminisentimentanalysis'
 urlpatterns = [
-    path('geminisentiment/', views.geminisentiment.as_view(), name="geminisentiment")
+    #path('geminisentiment/', views.GeminiSentiment.as_view(), name="geminisentiment")
+    path('geminizeroshot/', views.ZeroShot.as_view(), name="ZeroShot")
 ]
