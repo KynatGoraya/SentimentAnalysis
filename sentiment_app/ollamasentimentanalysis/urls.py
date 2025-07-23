@@ -1,9 +1,8 @@
- 
-from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 from . import views
 
-app_name= 'ollamasentimentanalysis'
+app_name = 'ollamasentimentanalysis'
+
 urlpatterns = [
-    path('ollamasentiment/', views.OllamaSentiment.as_view(), name="ollamasentiment")
+    path('ollamazeroshot/', views.ZeroShot.as_view(), name="ZeroShot"),
 ]

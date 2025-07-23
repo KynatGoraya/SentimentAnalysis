@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
+from sentiment_app.prompts import Prompts
+import json
 # Create your views here.
 from geminisentimentanalysis.generate_response import GenerateResponse
 
@@ -9,16 +10,26 @@ from geminisentimentanalysis.generate_response import GenerateResponse
 
 response=GenerateResponse()
 
-class geminisentiment(APIView):
+class GeminiSentiment(APIView):
+    prompttype=None
     def post(self,request):
         try:
             if request.method !='POST':
                 return Response({'result':{},'status':"Failure",'message':'Get request not allowed'}, status = 400)
             
             user_review=request.data.get('userReview')
-            prompt="Classify the review into positive, negative or neutral. The user review is as follows: {user_review}"
-            classification=response.getresponse(prompt)
-            return Response({"Response":{classification}, 'status':"Success"})
+            prompt = self.prompttype(user_review)
+            rawresponse=response.getresponse(prompt)
+            
+            cleaned = rawresponse.replace("```json", "").replace("```", "").strip()
+            classification = json.loads(cleaned)
+
+            return Response({"Response": classification, "status": "Success"})
         except Exception as e:
             return Response({"status": "Failure", "message : ": str(e)}, status=400)
 
+class ZeroShot(GeminiSentiment):
+   def __init__(self):
+       super().__init__()
+       self.prompttype = Prompts().ZeroShot
+       
