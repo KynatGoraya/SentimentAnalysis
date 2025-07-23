@@ -27,8 +27,8 @@ class OllamaSentiment(APIView):
             return Response({"status": "Failure", "message : ": str(e)}, status=400)
     
 class ZeroShot(OllamaSentiment):
-    def __init__(self):
-        super().__init__()
-        self.prompttype = Prompts().ZeroShot
+    prompttype = Prompts().ZeroShot
 
+class FewShots(OllamaSentiment):
+    prompttype = Prompts().FewShots
 

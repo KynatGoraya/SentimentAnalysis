@@ -5,4 +5,5 @@ app_name = 'ollamasentimentanalysis'
 
 urlpatterns = [
     path('ollamazeroshot/', views.ZeroShot.as_view(), name="ZeroShot"),
+    path('ollamafewshots/', views.FewShots.as_view(), name="FewShots"),
 ]
