@@ -20,7 +20,7 @@ class GeminiSentiment(APIView):
             user_review=request.data.get('userReview')
             prompt = self.prompttype(user_review)
             rawresponse=response.getresponse(prompt)
-            
+
             cleaned = rawresponse.replace("```json", "").replace("```", "").strip()
             classification = json.loads(cleaned)
 
@@ -32,4 +32,8 @@ class ZeroShot(GeminiSentiment):
    def __init__(self):
        super().__init__()
        self.prompttype = Prompts().ZeroShot
-       
+
+class FewShots(GeminiSentiment):
+    def __init__(self):
+        super().__init__()
+        self.prompttype = Prompts().FewShots
