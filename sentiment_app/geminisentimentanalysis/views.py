@@ -29,11 +29,10 @@ class GeminiSentiment(APIView):
             return Response({"status": "Failure", "message : ": str(e)}, status=400)
 
 class ZeroShot(GeminiSentiment):
-   def __init__(self):
-       super().__init__()
-       self.prompttype = Prompts().ZeroShot
+    prompttype = Prompts().ZeroShot
 
 class FewShots(GeminiSentiment):
-    def __init__(self):
-        super().__init__()
-        self.prompttype = Prompts().FewShots
+    prompttype = Prompts().FewShots
+
+class ChainOfThought(GeminiSentiment):
+    prompttype = Prompts().ChainOfThought

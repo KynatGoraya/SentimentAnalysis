@@ -2,7 +2,7 @@
 import ollama
 
 class GenerateResponse:
-    def __init__(self, model_name="llama3.3"):
+    def __init__(self, model_name="gemma3:latest"):
         try:
             self.model = model_name
         except Exception as e:
