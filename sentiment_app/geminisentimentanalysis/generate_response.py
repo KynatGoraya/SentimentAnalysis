@@ -16,16 +16,19 @@ class GenerateResponse:
             self.model = gen.GenerativeModel(model_name)
         except Exception as e:
             print("Model not loading:", e)
-
+            
     def getresponse(self, prompt):
-        response = self.model.generate_content(
-            prompt,
-            generation_config={
-                "temperature": 0.6
-            }
-        )
-        print(response.text)
-        return response.text
+        try:
+            response = self.model.generate_content(
+                prompt,
+                generation_config={
+                    "temperature": 0.6
+                }
+            )
+            print(response.text)
+            return response.text
+        except Exception as e:
+            return f"Error in generating response:{e}"
 
 
     
