@@ -20,25 +20,19 @@ You are an intelligent sentiment analyzer. Your task is to analyze a patient rev
 
 **Task Goals**:
 1. Categorize the review as **Positive**, **Negative**, or **Neutral** under "Category".
-2. List key reasons, complaints, or praise (phrases or keywords) to highlight performance — under "Factors" ** based upon the category **.
+2. List key reasons, complaints, or praise (keywords) to highlight performance — under "Factors" ** based upon the category **.
 3. Carefully determine the correct "Instigators" from this list: {department_list_string}. Base this on:
     - A clear understanding of each department's indepth responsibilities aginst patients.
-    - Properly match the **Factors** identified to the responsibilities of specific departments to include those departments.
-    - Only include a department if it is **reasonably and directly related** to the concern or praise mentioned.
-    - Avoid guessing or hallucinating. 
+    - Properly match the **Factors** identified to the responsibilities of specific departments to include those resoanable departments.
     - **NEVER** include departments outside of the list provided.
     - If the patient mentions a department not present in the provided list, infer its meaning based on context and map it to the closest matching department by responsibility.
-    - If more than one department is clearly involved based on the Factors, include them all.
 
 **Instructions**:
 - Always return a valid JSON object.
-- If the review has **both positive and negative parts**, choose the **dominant sentiment** and mention instigators and factors ** based upon that category only** .
-- If the review is **vague** or **lacks detail**, mark it as **Neutral** and use ["General feedback"] for "Factors".
 - If the sentiment **targets no one explicitly**, use ["Unclear"] under "Instigators".
 - If sarcasm or figurative language is used, interpret the intended meaning and express it in clear, literal terms.
 - NEVER include explanation, commentary, or anything outside of the JSON.
 - All JSON fields must be non-empty arrays (strings inside arrays).
-
 **Output Format**:
 ```json
 {{
@@ -58,7 +52,7 @@ Return **only** the JSON output above. **Do not include any explanation or comme
         except Exception as e:
             return f"Error generating prompt: {e}"
  
- # if i add adjectives in the factors; it lists adjectives to express the sentiment
+ 
     def FewShots(self,user_review):
         try:
             department_list_string = ", ".join(self.departments)
@@ -67,21 +61,15 @@ You are an intelligent sentiment analyzer. Your task is to analyze a patient rev
 
 **Task Goals**:
 1. Categorize the review as **Positive**, **Negative**, or **Neutral** under "Category".
-2. List key reasons, complaints, or praise (phrases or keywords) to highlight performance — under "Factors" ** based upon the category **.
+2. List key reasons, complaints, or praise (keywords) to highlight performance — under "Factors" ** based upon the category **.
 3. Carefully determine the correct "Instigators" from this list: {department_list_string}. Base this on:
     - A clear understanding of each department's indepth responsibilities aginst patients.
-    - Properly match the **Factors** identified to the responsibilities of specific departments to include those departments.
-    - Only include a department if it is **reasonably and directly related** to the concern or praise mentioned.
-    - **Avoid guessing or hallucinating** a department that is not in the list.
-    - **NEVER include departments outside of the list provided**.
+    - Properly match the **Factors** identified to the responsibilities of specific departments to include those resoanable departments.
+    - **NEVER guess or hallucinate** a department that is not in the list.
     - If the patient mentions a department not present in the provided list, infer its meaning based on context and map it to the closest matching department by responsibility.
     - Like if the patient says " Billing department was awful"; the alternative to Billing department is "Finance Department" in the pre-mentioned list studied based upon responisiblities.
-    - If more than one department is clearly involved based on the Factors, include them all.
-
 **Instructions**:
 - Always return a valid JSON object.
-- If the review has **both positive and negative parts**, choose the **sdominant sentiment** and mention instigators and factors ** based upon that category only** .
-- If the review is **vague** or **lacks detail**, mark it as **Neutral** and use ["General feedback"] for "Factors".
 - If the sentiment **targets no one explicitly**, use ["Unclear"] under "Instigators".
 - If sarcasm or figurative language is used, interpret the intended meaning and express it in clear, literal terms. For example, rephrase a sarcastic comment like "restrooms with that 'authentic' biohazard aroma" into a straightforward observation such as "restroom smelled awful". Avoid including figurative or sarcastic language directly in the output. 
 - NEVER include explanation, commentary, or anything outside of the JSON.
@@ -145,46 +133,6 @@ User Review:
         ]
     }}
 }}
-
-**Input**:
-Example 3: Neutral Sentiment
-User Review:
- "I guess things went as expected, which is either good or just average. No one really stood out, but no one messed up either. The food looked weird but tasted fine, and the doctor didn't say much — maybe that's just how he is. I'm not really sure what to make of it all."
-**Output**:
- ```json
- {{
-        "Sentiment Analysis": {{
-            "Category": [
-                "Neutral"
-            ],
-            "Instigators": [
-                "Catering and Food Services",
-                "Outpatient Department"
-            ],
-            "Factors": [
-                "General feedback"
-            ]
-        }}
-}}
-
-**Input**:
-Example 4: Neutral Sentiment
-User Review:
-"It was a hospital visit like any other. I waited, got what I came for, and left. Nothing really stood out to me — good or bad. Just another day, I suppose."
- **Output**:
- ```json
- {{
-    "Sentiment Analysis": {{
-        "Category":["Neutral"],
-        "Instigators": [
-            "Unclear"
-        ],
-        "Factors": [
-            "General feedback"
-        ]
-    }}
-}}
-
 Analyze the following user review: "{user_review}"
 
 Return **only** the JSON output above. **Do not include any explanation or commentary**.
@@ -203,20 +151,15 @@ You are an intelligent sentiment analyzer. Your task is to analyze a patient rev
 **Step-by-Step Chain of Thought**:
 
 1. **Understand the Review**:
-   - Read the user review carefully and thouroughly: "{user_review}".
-   - Identify the overall tone by looking for emotionally charged words, phrases, or descriptions (e.g., "kind," "awful," "comforting").
-   - Detect any sarcasm or figurative language (e.g., "restrooms with that 'authentic' biohazard aroma").  
+   - Read the user review carefully and thouroughly: "{user_review}" and identify overall tone.
 
 2. **Determine the Dominant Sentiment**:
-   - Categorize the review as **Positive**, **Negative**, or **Neutral** based on the dominant tone.
-   - If the review contains more than one sentiment, focus on the **stronger sentiment** (e.g., more emphasis on praise or complaints) to assign the category.
-   - If the review is vague, lacks detail, or expresses indifference, classify it as **Neutral**.
+   - Categorize the review as one of these: **Positive**, **Negative**, or **Neutral** based on the ** dominent, stronger sentiment **.
    - **List the sentiment identified under the ** Category ** element of the JSON.**
 
-3. **Identify Factors**:
-   - Extract key phrases, or keywords that explain the sentiment included in the Category(e.g., "kind nurse," "stained bedsheets," "calming vibe").
+3. **Identify **Factors** **:
+   - Extract keywords that explain the sentiment included in the Category.
    - Add them to the ** Factors ** element of JSON format.
-   - For **Neutral** reviews, if no specific factors are clear, use ["General feedback"].
    - If the review includes sarcasm, rewrite those phrases into direct, literal expressions. For example, instead of "used syringes as part of the décor near the waste bin," use "used syringes found near the waste bin."
 
 4. **Assign Instigators**:
@@ -241,27 +184,7 @@ You are an intelligent sentiment analyzer. Your task is to analyze a patient rev
     "Instigators": ["<<instigators>>"],
     "Factors": ["<<factors>>"]
   }}
-}}
-Example:
-This what the entire flow looks like and how the output shows on the user end on postman.
-**Input**:
-Example 4: Neutral Sentiment
-User Review:
-"It was a hospital visit like any other. I waited, got what I came for, and left. Nothing really stood out to me — good or bad. Just another day, I suppose."
- **Output**:
- ```json
- {{
-    "Sentiment Analysis": {{
-        "Category":["Neutral"],
-        "Instigators": [
-            "Unclear"
-        ],
-        "Factors": [
-            "General feedback"
-        ]
-    }}
-}}
-        """
+}}      """
             return prompt
         except Exception as e:
             return f"Error generating prompt: {e}"
