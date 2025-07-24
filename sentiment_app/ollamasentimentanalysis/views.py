@@ -32,3 +32,5 @@ class ZeroShot(OllamaSentiment):
 class FewShots(OllamaSentiment):
     prompttype = Prompts().FewShots
 
+class ChainOfThought(OllamaSentiment):
+    prompttype = Prompts().ChainOfThought
