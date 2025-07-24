@@ -17,15 +17,12 @@ class GenerateResponse:
             model_names = [model.model for model in models['models']]
             print("Printing model names",model_names)
             if self.model not in model_names:
-                print(f"Model '{self.model}' not found. Attempting to pull it...")
-                ollama.pull(self.model)
-                print(f"Successfully pulled '{self.model}'")
-
+                print(f"Model '{self.model}' not found. Pull it before using")
             else:
                 print(f"Model '{self.model}' is already available.")
             response = ollama.chat(
                 model=self.model,
-                messages=[{"role": "user", "content": "Hello"}]
+                messages=[{"role": "user", "content": "Say Hello"}]
             )
             print("Ollama is working. Sample response:")
             print(response['message']['content'])
@@ -34,7 +31,7 @@ class GenerateResponse:
             print("Error during Ollama model check:", e)
 
     def getresponse(self, prompt):
-        #self.check_ollama_model()
+        self.check_ollama_model()
         try:
             response = ollama.chat(
                 model=self.model,

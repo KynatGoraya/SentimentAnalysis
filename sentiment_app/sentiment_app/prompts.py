@@ -58,6 +58,7 @@ Return **only** the JSON output above. **Do not include any explanation or comme
         except Exception as e:
             return f"Error generating prompt: {e}"
  
+ # if i add adjectives in the factors; it lists adjectives to express the sentiment
     def FewShots(self,user_review):
         try:
             department_list_string = ", ".join(self.departments)
@@ -66,7 +67,7 @@ You are an intelligent sentiment analyzer. Your task is to analyze a patient rev
 
 **Task Goals**:
 1. Categorize the review as **Positive**, **Negative**, or **Neutral** under "Category".
-2. List key reasons, complaints, or praise (phrases, adjectives or keywords) to highlight performance — under "Factors" ** based upon the category **.
+2. List key reasons, complaints, or praise (phrases or keywords) to highlight performance — under "Factors" ** based upon the category **.
 3. Carefully determine the correct "Instigators" from this list: {department_list_string}. Base this on:
     - A clear understanding of each department's indepth responsibilities aginst patients.
     - Properly match the **Factors** identified to the responsibilities of specific departments to include those departments.
